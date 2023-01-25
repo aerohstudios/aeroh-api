@@ -1,0 +1,111 @@
+openapi: 3.0.0
+servers:
+  - description: Aeroh Cloud Production Server
+    url: https://cloud.aeroh.org/api/v1
+info:
+  version: "1.0.0"
+  title: Aeroh Cloud API
+  description: >-
+    Aeroh Cloud API adheres with OpenAPI 3 Spec, and provides developers with the ability to operate their devices on Aeroh Cloud with custom integrations and scripts.
+    Refer [Aeroh Cloud API](https://aeroh.org/cloud/api) to get started and to download language bindings.
+  contact:
+    name: "Aeroh Cloud API"
+    url: "https://aeroh.org/cloud/api"
+security:
+  - accessCode:
+      - read_devices
+      - write_devices
+      - control_devices
+paths:
+  /devices:
+    get:
+      summary: Get list of devices
+      description: >-
+        Get list of devices in the account.
+      security:
+        - accessCode:
+          - read_devices
+      tags:
+        - devices
+      responses:
+        '200':
+          description: OK
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/device'
+  /devices/{id}:
+    get:
+      summary: Get single device details
+      description: >-
+        Get all the details corresponding to a single device.
+      security:
+        - accessCode:
+          - read_devices
+      tags:
+        - devices
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/device'
+tags:
+  - name: devices
+    description: "Device operations"
+components:
+  schemas:
+    device:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+        links:
+          type: object
+          properties:
+            self:
+              type: string
+        attributes:
+          type: object
+          properties:
+            name:
+              type: string
+            mac-addr:
+              type: string
+            provisioned:
+              type: string
+            cert-active:
+              type: string
+            thing-name:
+              type: string
+            mqtt-uri:
+              type: string
+  securitySchemes:
+    accessCode:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: 'https://cloud.aeroh.org/oauth/authorize'
+          tokenUrl: 'https://cloud.aeroh.org/oauth/token'
+          scopes:
+            read_devices: allows reading resources
+            write_devices: allows adding, modifying and deleting devices
+            control_devices: allows controlling devices, ideal for integrations
