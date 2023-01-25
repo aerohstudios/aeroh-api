@@ -11,6 +11,11 @@ info:
   contact:
     name: "Aeroh Cloud API"
     url: "https://aeroh.org/cloud/api"
+    email: "support@aeroh.org"
+  license:
+    name: "The GNU General Public License v3.0"
+    url: "https://www.gnu.org/licenses/gpl-3.0.en.html"
+  termsOfService: "https://aeroh.org/legal/terms-and-conditions"
 security:
   - accessCode:
       - read_devices
