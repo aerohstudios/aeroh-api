@@ -25,6 +25,7 @@ paths:
   /devices:
     get:
       summary: Get list of devices
+      operationId: "getDevices"
       description: >-
         Get list of devices in the account.
       security:
@@ -47,6 +48,7 @@ paths:
   /devices/{id}:
     get:
       summary: Get single device details
+      operationId: "getDevice"
       description: >-
         Get all the details corresponding to a single device.
       security:
