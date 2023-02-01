@@ -73,6 +73,55 @@ paths:
                 properties:
                   data:
                     $ref: '#/components/schemas/device'
+  /devices/{id}/publish:
+    post:
+      summary: Publish a message to the device
+      operationId: "publishToDevice"
+      description: >-
+        Publish a message to the device. This operation can be used to send commands to the device using a REST API.
+        The endpoint will take care of translating the request to MQTT, and client doesn't have to worry about alternate authentication mechanism or library for a MQTT connection.
+      security:
+        - accessCode:
+          - controlDevices
+      tags:
+        - devices
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: '#/components/schemas/device_publish'
+            examples:
+              data:
+                summary: "Toggle Device Power"
+                value:
+                  data:
+                    topic: "commands"
+                    payload: ["power", "toggle"]
+      responses:
+        '201':
+          description: 'Created'
+          content:
+            application/vnd.api+json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/device_publish'
+                  errors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/errors'
 tags:
   - name: devices
     description: "Device operations"
@@ -105,6 +154,73 @@ components:
               type: string
             mqtt-uri:
               type: string
+    device_publish:
+      type: object
+      properties:
+        topic:
+          type: string
+        payload:
+          oneOf:
+            - type: object
+            - type: array
+    errors:
+      type: object
+      description: "JSON API 1.1 Error Object"
+      properties:
+        id:
+          type: string
+        links:
+          type: object
+          properties:
+            about:
+              $ref: '#/components/schemas/link'
+            type:
+              $ref: '#/components/schemas/link'
+        status:
+          type: string
+        code:
+          type: string
+        title:
+          type: string
+        detail:
+          type: string
+        source:
+          type: object
+          properties:
+            pointer:
+              type: string
+            parameter:
+              type: string
+            header:
+              type: string
+        meta:
+          type: object
+    link:
+      description: "JSON API 1.1 Links Object Value"
+      oneOf:
+        - type: string
+          nullable: true
+        - $ref: '#/components/schemas/linkObj'
+    linkObj:
+      description: "JSON API 1.1 Link Object"
+      type: object
+      required:
+        - href
+      properties:
+        href:
+          type: string
+        rel:
+          type: string
+        describedBy:
+          $ref: '#/components/schemas/link'
+        title:
+          type: string
+        type:
+          type: string
+        hreflang:
+          type: string
+        meta:
+          type: object
   securitySchemes:
     accessCode:
       type: oauth2
