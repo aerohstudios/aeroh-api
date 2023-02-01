@@ -121,7 +121,7 @@ paths:
                   errors:
                     type: array
                     items:
-                      $ref: '#/components/schemas/errors'
+                      $ref: '#/components/schemas/error'
 tags:
   - name: devices
     description: "Device operations"
@@ -163,7 +163,7 @@ components:
           oneOf:
             - type: object
             - type: array
-    errors:
+    error:
       type: object
       description: "JSON API 1.1 Error Object"
       properties:
