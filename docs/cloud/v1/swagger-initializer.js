@@ -3,7 +3,7 @@ window.onload = function() {
 
   // the following lines will be replaced by docker/configurator, when it runs in a docker-container
   window.ui = SwaggerUIBundle({
-    url: "https://apidocs.aeroh.org/aeroh-api/cloud/v1/schema.yml",
+    url: "https://apidocs.aeroh.org/cloud/v1/schema.yml",
     dom_id: '#swagger-ui',
     deepLinking: true,
     presets: [
